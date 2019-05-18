@@ -83,12 +83,12 @@ class Dancer extends Component {
                     <Col md={{size: 12}} className="pb-3">
                         <Card>
                             <CardBody>
-                                <CardTitle className="mb-4">
+                                <CardTitle className="mb-4 align-items-center">
                                     <Row className="align-items-center">
-                                        <Col xs={6}>
+                                        <Col xs={4}>
                                             <h3>Član</h3>
                                         </Col>
-                                        <Col xs={6}>
+                                        <Col xs={8}>
 
                                             {
                                                 this.state.disabled ?
@@ -98,7 +98,7 @@ class Dancer extends Component {
                                                     <>
                                                     <Button className="btn-danger float-right"
                                                             onClick={() => (this.toggleDisabled(), this.fetchDancer())}>Otkaži</Button>
-                                                    <Button className="btn-success float-right"
+                                                    <Button className="btn-success float-right mr-2"
                                                             onClick={this.updateDancer}>Sačuvaj</Button>
                                                     </>
                                             }
@@ -107,7 +107,7 @@ class Dancer extends Component {
                                 </CardTitle>
                                 <Row className="mb-3 align-items-center">
                                     <Col xs={4}>
-                                        <h5>Ime</h5>
+                                        <h6>Ime</h6>
                                     </Col>
                                     <Col xs={8}>
                                         <Input bsSize="lg" name="first_name" value={!this.state.dancer.first_name ? '' : this.state.dancer.first_name}
@@ -116,7 +116,7 @@ class Dancer extends Component {
                                 </Row>
                                 <Row className="mb-3 align-items-center">
                                     <Col xs={4}>
-                                        <h5>Prezime</h5>
+                                        <h6>Prezime</h6>
                                     </Col>
                                     <Col xs={8}>
                                         <Input bsSize="lg" name="last_name" value={!this.state.dancer.last_name ? '' : this.state.dancer.last_name}
@@ -125,7 +125,7 @@ class Dancer extends Component {
                                 </Row>
                                 <Row className="mb-3 align-items-center">
                                     <Col xs={4}>
-                                        <h5>Telefon</h5>
+                                        <h6>Telefon</h6>
                                     </Col>
                                     <Col xs={8}>
                                         <Input bsSize="lg" name="phone_number" value={!this.state.dancer.phone_number ? '' : this.state.dancer.phone_number}
@@ -134,7 +134,7 @@ class Dancer extends Component {
                                 </Row>
                                 <Row className="mb-3 align-items-center">
                                     <Col xs={4}>
-                                        <h5>Roditelj</h5>
+                                        <h6>Roditelj</h6>
                                     </Col>
                                     <Col xs={8}>
                                         <Input bsSize="lg" name="parent" value={!this.state.dancer.parent ? '' : this.state.dancer.parent}
@@ -143,7 +143,7 @@ class Dancer extends Component {
                                 </Row>
                                 <Row className="mb-3 align-items-center">
                                     <Col xs={4}>
-                                        <h5>Grupa</h5>
+                                        <h6>Grupa</h6>
                                     </Col>
                                     <Col xs={8}>
                                         <Input bsSize="lg"
