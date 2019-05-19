@@ -59,12 +59,20 @@ class Dancer extends Component {
             });
     }
 
+    componentDidMount() {
+        this.setState({
+            loading: false
+        })
+
+        document.title="Dodaj plesaca"
+    }
+
     render() {
         
         if (this.state.redirect) {
             return <Redirect to={"/dancers"}/>
         }
-        
+
         return (
             <Container>
                 <Row>

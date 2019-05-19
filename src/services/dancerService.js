@@ -52,7 +52,7 @@ export default {
     deleteDancer: async (id) => {
         return axios({
             method: 'DELETE',
-            url: `https://dance-club.herokuapp.com/dancer/${id}`,
+            url: `https://dance-club.herokuapp.com/dancer/delete/${id}`,
             headers: {
                 'Content-Type': 'application/json'
             }

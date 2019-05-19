@@ -10,6 +10,7 @@ import {
     Button
 } from "reactstrap";
 import dancerService from "../../services/dancerService";
+import {Redirect} from "react-router-dom";
 
 class Dancer extends Component {
     constructor(props) {
@@ -18,11 +19,13 @@ class Dancer extends Component {
         this.state = {
             dancer: {},
             disabled: true,
+            redirect: false
         };
 
         this.toggleDisabled = this.toggleDisabled.bind(this);
         this.handleChange = this.handleChange.bind(this);
-        this.updateDancer = this.updateDancer.bind(this)
+        this.updateDancer = this.updateDancer.bind(this);
+        this.deleteDancer = this.deleteDancer.bind(this);
     }
 
     toggleDisabled() {
@@ -72,11 +75,30 @@ class Dancer extends Component {
             });
     }
 
+    deleteDancer() {
+        let id = this.state.dancer.id;
+
+        dancerService.deleteDancer(id)
+            .then(() => {
+                this.setState({
+                    redirect: true
+                });
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     componentDidMount() {
         this.fetchDancer();
     }
 
     render() {
+
+        if (this.state.redirect) {
+            return <Redirect to={"/dancers"}/>
+        }
+
         return (
             <Container>
                 <Row>
@@ -92,14 +114,18 @@ class Dancer extends Component {
 
                                             {
                                                 this.state.disabled ?
-                                                    <Button className="btn-warning float-right"
-                                                            onClick={this.toggleDisabled}>Uredi</Button>
+                                                    <>
+                                                        <Button className="btn-danger float-right"
+                                                                onClick={this.deleteDancer}>Obriši</Button>
+                                                        <Button className="btn-warning float-right mr-2"
+                                                                onClick={this.toggleDisabled}>Uredi</Button>
+                                                    </>
                                                     :
                                                     <>
-                                                    <Button className="btn-danger float-right"
-                                                            onClick={() => (this.toggleDisabled(), this.fetchDancer())}>Otkaži</Button>
-                                                    <Button className="btn-success float-right mr-2"
-                                                            onClick={this.updateDancer}>Sačuvaj</Button>
+                                                        <Button className="btn-warning float-right"
+                                                                onClick={() => (this.toggleDisabled(), this.fetchDancer())}>Otkaži</Button>
+                                                        <Button className="btn-success float-right mr-2"
+                                                                onClick={this.updateDancer}>Sačuvaj</Button>
                                                     </>
                                             }
                                         </Col>
@@ -110,7 +136,8 @@ class Dancer extends Component {
                                         <h6>Ime</h6>
                                     </Col>
                                     <Col xs={8}>
-                                        <Input bsSize="lg" name="first_name" value={!this.state.dancer.first_name ? '' : this.state.dancer.first_name}
+                                        <Input bsSize="lg" name="first_name"
+                                               value={!this.state.dancer.first_name ? '' : this.state.dancer.first_name}
                                                disabled={this.state.disabled} onChange={this.handleChange}/>
                                     </Col>
                                 </Row>
@@ -119,7 +146,8 @@ class Dancer extends Component {
                                         <h6>Prezime</h6>
                                     </Col>
                                     <Col xs={8}>
-                                        <Input bsSize="lg" name="last_name" value={!this.state.dancer.last_name ? '' : this.state.dancer.last_name}
+                                        <Input bsSize="lg" name="last_name"
+                                               value={!this.state.dancer.last_name ? '' : this.state.dancer.last_name}
                                                disabled={this.state.disabled} onChange={this.handleChange}/>
                                     </Col>
                                 </Row>
@@ -128,7 +156,8 @@ class Dancer extends Component {
                                         <h6>Telefon</h6>
                                     </Col>
                                     <Col xs={8}>
-                                        <Input bsSize="lg" name="phone_number" value={!this.state.dancer.phone_number ? '' : this.state.dancer.phone_number}
+                                        <Input bsSize="lg" name="phone_number"
+                                               value={!this.state.dancer.phone_number ? '' : this.state.dancer.phone_number}
                                                disabled={this.state.disabled} onChange={this.handleChange}/>
                                     </Col>
                                 </Row>
@@ -137,7 +166,8 @@ class Dancer extends Component {
                                         <h6>Roditelj</h6>
                                     </Col>
                                     <Col xs={8}>
-                                        <Input bsSize="lg" name="parent" value={!this.state.dancer.parent ? '' : this.state.dancer.parent}
+                                        <Input bsSize="lg" name="parent"
+                                               value={!this.state.dancer.parent ? '' : this.state.dancer.parent}
                                                disabled={this.state.disabled} onChange={this.handleChange}/>
                                     </Col>
                                 </Row>
