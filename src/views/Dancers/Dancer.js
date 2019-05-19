@@ -7,25 +7,33 @@ import {
     CardBody,
     CardTitle,
     Input,
-    Button
+    Button, Table
 } from "reactstrap";
 import dancerService from "../../services/dancerService";
 import {Redirect} from "react-router-dom";
+import moment from "moment/moment";
+import paymentService from "../../services/paymentService";
 
 class Dancer extends Component {
+
     constructor(props) {
         super(props);
 
         this.state = {
             dancer: {},
+            payments: {},
             disabled: true,
-            redirect: false
+            redirect: false,
+            loading: true,
         };
 
         this.toggleDisabled = this.toggleDisabled.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.updateDancer = this.updateDancer.bind(this);
         this.deleteDancer = this.deleteDancer.bind(this);
+        this.getPaymentsByDancer = this.getPaymentsByDancer.bind(this);
+        this.deletePayment = this.deletePayment.bind(this);
+
     }
 
     toggleDisabled() {
@@ -52,8 +60,23 @@ class Dancer extends Component {
         dancerService.getDancer(params.id)
             .then((dancer) => {
                 this.setState({
-                    dancer: dancer.data.dancer
+                    dancer: dancer.data.dancer,
                 })
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    getPaymentsByDancer() {
+        const {match: {params}} = this.props;
+        paymentService.getDancerPayments(params.id)
+            .then((payments) => {
+                this.setState({
+                    payments: payments.data.payment,
+                    loading: false
+                })
+                console.log(this.state.payments)
             })
             .catch((err) => {
                 console.log(err);
@@ -89,8 +112,19 @@ class Dancer extends Component {
             });
     }
 
+    deletePayment(id) {
+
+        paymentService.deletePayment(id)
+            .then(() => {})
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
     componentDidMount() {
-        this.fetchDancer();
+        this.fetchDancer()
+        this.getPaymentsByDancer()
+        document.title = "Član | PK Ritam Admin"
     }
 
     render() {
@@ -182,6 +216,47 @@ class Dancer extends Component {
                                                disabled={this.state.disabled} onChange={this.handleChange}/>
                                     </Col>
                                 </Row>
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col md={{size: 12}} className="pb-3">
+                        <Card>
+                            <CardBody>
+                                <CardTitle className="mb-4"><h3>Uplate</h3></CardTitle>
+                                {
+                                    this.state.loading ? <h4>Ucitava se...</h4> :
+                                    <Table responsive>
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Količina</th>
+                                            <th>Datum</th>
+                                            <th>Napomena</th>
+                                            <th className="text-right">Akcija</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {
+                                            this.state.payments.map((payment) => {
+                                                return (
+                                                    <tr key={payment.id}>
+                                                        <th scope="row">{payment.id}</th>
+                                                        <td>{!payment.amount ? "-" : payment.amount} KM</td>
+                                                        <td>{!payment.date ? "-" : moment(payment.date).format('DD.MM.YYYY')}</td>
+                                                        <td>{!payment.note ? "-" : payment.note}</td>
+                                                        <td>
+                                                            <Button className="btn-danger float-right"
+                                                                    onClick={() => this.deletePayment(payment.id)}>Obriši</Button>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
+                                        }
+                                        </tbody>
+                                    </Table>
+                                }
                             </CardBody>
                         </Card>
                     </Col>

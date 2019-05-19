@@ -22,6 +22,8 @@ class Dancers extends Component {
             .catch((err) => {
                 console.log(err);
             });
+
+        document.title="Članovi | PK Ritam Admin"
     }
 
     render() {
